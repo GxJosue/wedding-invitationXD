@@ -1,0 +1,39 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Función auxiliar para verificar si es admin
+    function isAdmin() {
+      return exists(/databases/$(database)/documents/admins/$(request.auth.token.email));
+    }
+    
+    // Función auxiliar para verificar si es el mismo usuario
+    function isOwner(email) {
+      return request.auth != null && request.auth.token.email == email;
+    }
+    
+    // Colección de invitados
+    match /invitados/{email} {
+      // Los invitados solo pueden leer su propio documento
+      allow read: if isOwner(email) || isAdmin();
+      
+      // Los invitados solo pueden actualizar sus propios campos de confirmación
+      allow update: if (isOwner(email) && 
+                       request.resource.data.diff(resource.data).affectedKeys()
+                         .hasOnly(['confirmados', 'confirmacion']) &&
+                       request.resource.data.confirmados <= resource.data.maxInvitados &&
+                       request.resource.data.confirmados >= 0)
+                    || isAdmin();
+      
+      // Solo admins pueden crear o eliminar
+      allow create, delete: if isAdmin();
+    }
+    
+    // Colección de admins (solo lectura para verificación)
+    match /admins/{email} {
+      allow read: if request.auth != null && request.auth.token.email == email;
+      allow write: if false; // Los admins solo se crean manualmente
+    }
+  }
+}
