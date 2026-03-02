@@ -56,14 +56,14 @@ export const AdminPanel = () => {
         return;
       }
 
-      const invitadoData: Invitado = {
-        nombre: nuevoInvitado.nombre.trim(),
-        email: nuevoInvitado.email.toLowerCase().trim(),
-        maxInvitados: nuevoInvitado.maxInvitados,
-        confirmados: 0,
-        confirmacion: false
-      };
-
+        const invitadoData: Invitado = {
+          nombre: nuevoInvitado.nombre.trim(),
+          email: nuevoInvitado.email.toLowerCase().trim(),
+          maxInvitados: nuevoInvitado.maxInvitados,
+          confirmados: 0,
+          confirmacion: false,
+          rol: 'invitado'  
+        };
       // Crear documento en Firestore usando el email como ID
       await setDoc(doc(db, 'invitados', invitadoData.email), invitadoData);
 
@@ -152,9 +152,9 @@ export const AdminPanel = () => {
             email: email.toLowerCase().trim(),
             maxInvitados: maxInvitados,
             confirmados: 0,
-            confirmacion: false
+            confirmacion: false,
+            rol: 'invitado'  // ⬅️ AGREGA ESTO
           };
-
           try {
             await setDoc(doc(db, 'invitados', invitadoData.email), invitadoData);
             agregados++;
