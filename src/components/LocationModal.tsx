@@ -32,13 +32,13 @@ const embedUrl = `https://maps.google.com/maps?q=${location.lat},${location.lng}
           />
 
           {/* Modal */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden max-w-4xl w-full max-h-[90vh] overflow-y-auto pointer-events-auto"
-            >
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden max-w-4xl w-full max-h-[90vh] overflow-y-auto pointer-events-auto mx-auto"
+              >
               {/* Header del Modal */}
               <div className="sticky top-0 z-10 bg-gradient-to-r from-wedding-primary to-wedding-accent p-4 sm:p-6 flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -98,15 +98,15 @@ const embedUrl = `https://maps.google.com/maps?q=${location.lat},${location.lng}
                     </div>
                   </div>
 
-                  {/* Botones de navegación */}
-                  <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
-                    {/* Google Maps */}
-                    <a
-                      href={location.googleMapsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center justify-center gap-2 sm:gap-3 bg-gradient-to-r from-wedding-primary to-wedding-accent text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-medium hover:shadow-xl transition-all duration-300 hover:scale-105"
-                    >
+                      {/* Botones de navegación */}
+                      <div className="flex justify-center">
+                        {/* Google Maps */}
+                        <a
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.address)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full sm:w-auto bg-gradient-to-r from-wedding-primary to-wedding-accent text-white py-4 px-8 rounded-xl font-semibold hover:shadow-xl transition-all flex items-center justify-center gap-2 group"
+                        >
                       <svg className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 0C7.589 0 4 3.589 4 8c0 5.5 8 16 8 16s8-10.5 8-16c0-4.411-3.589-8-8-8zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
                       </svg>

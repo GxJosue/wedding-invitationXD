@@ -432,13 +432,12 @@ const [showConfirmationModal, setShowConfirmationModal] = useState(false);
                           <p className="text-green-700 text-lg mb-8">
                              <span className="font-bold text-2xl">{invitado.confirmados}</span> {invitado.confirmados === 1 ? 'persona' : 'personas'}
                           </p>
-
-                              <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={() => setShowConfirmationModal(true)}
-                                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-wedding-primary to-wedding-accent text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
-                              >
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => setShowConfirmationModal(true)}
+                              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-wedding-primary to-wedding-accent text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all mx-auto"
+                            >
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -486,12 +485,12 @@ const [showConfirmationModal, setShowConfirmationModal] = useState(false);
                           )}
 
                           {!fechaLimitePasada ? (
-                            <motion.button
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                              onClick={() => setShowConfirmationModal(true)}
-                              className="w-full sm:w-auto flex items-center justify-center gap-3 bg-gradient-to-r from-wedding-primary via-wedding-accent to-wedding-primary text-white px-8 sm:px-10 py-4 sm:py-5 rounded-xl font-semibold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all"
-                            >
+                              <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => setShowConfirmationModal(true)}
+                                className="w-full sm:w-auto flex items-center justify-center gap-3 bg-gradient-to-r from-wedding-primary via-wedding-accent to-wedding-primary text-white px-8 sm:px-10 py-4 sm:py-5 rounded-xl font-semibold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all mx-auto"
+                              >
                               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                               </svg>
