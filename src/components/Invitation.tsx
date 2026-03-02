@@ -1,47 +1,24 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState,} from "react";
+import { motion } from "framer-motion";
 import { useAuth } from "../contexts/AuthContext";
 import { useInvitado } from "../hooks/useInvitado";
 import { Countdown } from "./Countdown";
-import { PhotoCarousel } from './PhotoCarousel';      
-import { LocationMap } from './LocationMap';  
-import { LocationModal } from './LocationModal'; 
+import { PhotoCarousel } from './PhotoCarousel';
+import { LocationModal } from './LocationModal';
+import { ConfirmationModal } from './ConfirmationModal';
 
 export const Invitation = () => {
   const { usuario, signOut, isAdmin } = useAuth();
   const { invitado, loading, actualizarConfirmacion } = useInvitado(
     usuario?.email || null,
   );
-  const [confirmados, setConfirmados] = useState(0);
-  const [saving, setSaving] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showLocationModal, setShowLocationModal] = useState(false);
+const [showLocationModal, setShowLocationModal] = useState(false);
+const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   // Configuración de fecha límite
-  const FECHA_LIMITE = new Date("2026-03-03T23:59:59"); 
+  const FECHA_LIMITE = new Date("2026-03-29T23:59:59"); 
   const fechaLimitePasada = new Date() > FECHA_LIMITE;
 
-  useEffect(() => {
-    if (invitado) {
-      setConfirmados(invitado.confirmados || 0);
-    }
-  }, [invitado]);
-
-  const handleConfirmar = async () => {
-    if (!invitado) return;
-
-    try {
-      setSaving(true);
-      await actualizarConfirmacion(confirmados);
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 3000);
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Error al confirmar asistencia");
-    } finally {
-      setSaving(false);
-    }
-  };
 
   if (loading) {
     return (
@@ -435,350 +412,128 @@ export const Invitation = () => {
               {/* Cuenta Regresiva */}
               <Countdown />
 
-              {/* Confirmación de Asistencia */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.3 }}
-                className="relative px-4 sm:px-0"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-wedding-primary/5 to-wedding-accent/5 rounded-3xl blur-xl"></div>
-
-                <div className="relative bg-gradient-to-br from-white to-wedding-light/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 shadow-xl border border-wedding-primary/20">
-                  <div className="text-center mb-6 sm:mb-8">
-                    <motion.div
-                      animate={{ rotate: [0, 10, -10, 0] }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        repeatDelay: 3,
-                      }}
-                      className="inline-block mb-4"
-                    >
-                      <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-wedding-primary to-wedding-accent rounded-full flex items-center justify-center shadow-lg">
-                        <svg
-                          className="w-6 h-6 sm:w-8 sm:h-8 text-white"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                      </div>
-                    </motion.div>
-                    <h3 className="text-2xl sm:text-3xl font-elegant bg-clip-text text-transparent bg-gradient-to-r from-wedding-primary to-wedding-accent mb-2">
-                      Confirma tu Asistencia
-                    </h3>
-                    {!fechaLimitePasada ? (
-                      <p className="text-xs sm:text-sm text-wedding-primary font-semibold">
-                        Fecha límite:{" "}
-                        {FECHA_LIMITE.toLocaleDateString("es-MX", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })}
-                      </p>
-                    ) : (
-                      <p className="text-xs sm:text-sm text-red-600 font-semibold">
-                        ⚠️ La fecha límite de confirmación ha expirado
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="max-w-lg mx-auto space-y-4 sm:space-y-6">
-                    {/* Info de invitados */}
-                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                      <div className="bg-white/80 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-wedding-primary/20">
-                        <p className="text-xs sm:text-sm text-gray-600 mb-1">
-                          Invitados permitidos
-                        </p>
-                        <p className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-wedding-primary to-wedding-accent">
-                          {invitado.maxInvitados}
-                        </p>
-                      </div>
-                      <div className="bg-white/80 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-wedding-primary/20">
-                        <p className="text-xs sm:text-sm text-gray-600 mb-1">
-                          Ya confirmados
-                        </p>
-                        <p className="text-2xl sm:text-3xl font-bold text-wedding-accent">
-                          {invitado.confirmados || 0}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* SI LA FECHA LÍMITE PASÓ */}
-                    {fechaLimitePasada && !invitado.confirmacion ? (
-                      <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 sm:p-6">
-                        <div className="flex items-start gap-3 mb-4">
-                          <div className="flex-shrink-0 w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
-                            <svg
-                              className="w-6 h-6 text-white"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
+                {/* Confirmación de Asistencia */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.3 }}
+                  className="relative px-4 sm:px-0"
+                >
+                  <div className="max-w-2xl mx-auto">
+                    {invitado.confirmacion ? (
+                      /* Ya confirmó - Card simple */
+                      <div className="bg-gradient-to-br from-green-50 to-white rounded-2xl sm:rounded-3xl p-8 shadow-xl border-2 border-green-200">
+                        <div className="text-center">
+                          <div className="inline-flex items-center justify-center w-20 h-20 bg-green-500 rounded-full mb-6 shadow-lg">
+                            <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                           </div>
-                          <div className="flex-1">
-                            <h4 className="text-lg font-bold text-red-800 mb-2">
-                              Fecha Límite Expirada
-                            </h4>
-                            <p className="text-red-700 text-sm mb-4">
-                              La fecha límite para confirmar asistencia ha
-                              pasado. Las confirmaciones en línea ya no están
-                              disponibles.
-                            </p>
-
-                            <div className="bg-white/80 rounded-lg p-4 border border-red-200">
-                              <p className="text-sm text-gray-700 leading-relaxed mb-3">
-                                <strong>¿Aún deseas confirmar?</strong>
-                                <br />
-                                Por favor, contáctanos directamente.
-                              </p>
-                              <div className="pt-3 border-t border-gray-200">
-                                <p className="text-xs text-gray-600">
-                                  💬 WhatsApp:{" "}
-                                  <span className="font-semibold">
-                                    79256630
-                                  </span>
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ) : invitado.confirmacion ? (
-                      <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4 sm:p-6">
-                        <div className="flex items-start gap-3 mb-4">
-                          <div className="flex-shrink-0 w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                            <svg
-                              className="w-6 h-6 text-white"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                          </div>
-                          <div className="flex-1">
-                            <h4 className="text-lg font-bold text-green-800 mb-1">
-                              ¡Asistencia Confirmada!
-                            </h4>
-                            <p className="text-green-700 text-sm">
-                              Has confirmado la asistencia de{" "}
-                              <span className="font-bold">
-                                {invitado.confirmados}
-                              </span>{" "}
-                              {invitado.confirmados === 1
-                                ? "persona"
-                                : "personas"}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="bg-white/80 rounded-lg p-4 border border-green-200">
-                          <p className="text-sm text-gray-700 leading-relaxed">
-                            <strong>
-                              ¿Necesitas modificar tu confirmación?
-                            </strong>
-                            <br />
-                            Por favor, contáctanos directamente para realizar
-                            cualquier cambio.
+                          
+                          <h3 className="text-3xl font-elegant text-green-800 mb-3">
+                            ¡Asistencia Confirmada!
+                          </h3>
+                          
+                          <p className="text-green-700 text-lg mb-8">
+                             <span className="font-bold text-2xl">{invitado.confirmados}</span> {invitado.confirmados === 1 ? 'invitado' : 'invitados'}
                           </p>
-                          <div className="mt-3 pt-3 border-t border-gray-200">
-                            <p className="text-xs text-gray-600">
-                               💬 WhatsApp:{" "}
-                              <span className="font-semibold">
-                                79256630
-                              </span>
-                            </p>
-                          </div>
+
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setShowConfirmationModal(true)}
+                            className="inline-flex items-center gap-2 bg-gradient-to-r from-wedding-primary to-wedding-accent text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
+                          >
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            Ver Confirmación
+                          </motion.button>
                         </div>
                       </div>
                     ) : (
-                      <>
-                        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-wedding-primary/20">
-                          <label className="block text-gray-700 font-semibold mb-4 text-center text-sm sm:text-base">
-                            ¿Cuántas personas asistirán?
-                          </label>
-                          <div className="flex items-center justify-center gap-4 sm:gap-6">
-                            <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                              onClick={() =>
-                                setConfirmados(Math.max(0, confirmados - 1))
-                              }
-                              className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-wedding-primary to-wedding-accent text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center text-xl sm:text-2xl font-bold"
-                            >
-                              −
-                            </motion.button>
-
-                            <div className="text-center min-w-[80px] sm:min-w-[100px]">
-                              <motion.span
-                                key={confirmados}
-                                initial={{ scale: 1.2, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                className="text-4xl sm:text-5xl font-elegant bg-clip-text text-transparent bg-gradient-to-r from-wedding-primary to-wedding-accent block"
-                              >
-                                {confirmados}
-                              </motion.span>
-                              <span className="text-gray-500 text-xs sm:text-sm">
-                                {confirmados === 1 ? "persona" : "personas"}
-                              </span>
+                      /* No ha confirmado - Card de invitación */
+                      <div className="bg-gradient-to-br from-white to-wedding-light/30 rounded-2xl sm:rounded-3xl p-8 shadow-xl border border-wedding-primary/20">
+                        <div className="text-center">
+                          <motion.div
+                            animate={{ rotate: [0, 10, -10, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                            className="inline-block mb-6"
+                          >
+                            <div className="w-20 h-20 bg-gradient-to-br from-wedding-primary to-wedding-accent rounded-full flex items-center justify-center shadow-lg">
+                              <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
                             </div>
+                          </motion.div>
 
+                          <h3 className="text-3xl font-elegant bg-clip-text text-transparent bg-gradient-to-r from-wedding-primary to-wedding-accent mb-3">
+                            Confirma tu Asistencia
+                          </h3>
+                          
+                          <p className="text-gray-600 mb-2">
+                            Por favor, háznoslo saber lo antes posible
+                          </p>
+                          
+                          {!fechaLimitePasada ? (
+                            <p className="text-sm text-wedding-primary font-semibold mb-8">
+                              Fecha límite: {FECHA_LIMITE.toLocaleDateString("es-MX", {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric",
+                              })}
+                            </p>
+                          ) : (
+                            <p className="text-sm text-red-600 font-semibold mb-8">
+                              ⚠️ Fecha límite expirada
+                            </p>
+                          )}
+
+                          {!fechaLimitePasada ? (
                             <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                              onClick={() =>
-                                setConfirmados(
-                                  Math.min(
-                                    invitado.maxInvitados,
-                                    confirmados + 1,
-                                  ),
-                                )
-                              }
-                              disabled={confirmados >= invitado.maxInvitados}
-                              className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-wedding-accent to-wedding-primary text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center text-xl sm:text-2xl font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => setShowConfirmationModal(true)}
+                              className="inline-flex items-center gap-3 bg-gradient-to-r from-wedding-primary via-wedding-accent to-wedding-primary text-white px-10 py-5 rounded-xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all"
                             >
-                              +
+                              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                              </svg>
+                              Confirmar
                             </motion.button>
-                          </div>
-                        </div>
-
-                        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 sm:p-4">
-                          <div className="flex gap-2 sm:gap-3">
-                            <svg
-                              className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-600 flex-shrink-0 mt-0.5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                              />
-                            </svg>
-                            <p className="text-xs sm:text-sm text-yellow-800">
-                              <strong>Importante:</strong> Solo podrás confirmar
-                              una vez.
-                            </p>
-                          </div>
-                        </div>
-
-                        <motion.button
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={handleConfirmar}
-                          disabled={saving || confirmados === 0}
-                          className="w-full bg-gradient-to-r from-wedding-primary via-wedding-accent to-wedding-primary text-white py-4 sm:py-5 rounded-xl sm:rounded-2xl font-semibold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
-                        >
-                          <span className="relative z-10 flex items-center justify-center gap-2">
-                            {saving ? (
-                              <>
-                                <svg
-                                  className="animate-spin h-5 w-5"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <circle
-                                    className="opacity-25"
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
-                                    stroke="currentColor"
-                                    strokeWidth="4"
-                                  ></circle>
-                                  <path
-                                    className="opacity-75"
-                                    fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                  ></path>
+                          ) : (
+                            <div className="bg-red-50 border-2 border-red-200 rounded-xl p-6">
+                              <p className="text-red-700 mb-4">
+                                La fecha límite ha pasado. Contáctanos si deseas asistir.
+                              </p>
+                              <a
+                                href="https://wa.me/50379256630?text=Hola,%20quiero%20confirmar%20mi%20asistencia%20a%20la%20boda"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20BA5A] text-white py-3 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all group"
+                              >
+                                <svg className="w-6 h-6 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
                                 </svg>
-                                <span className="text-sm sm:text-base">
-                                  Guardando...
-                                </span>
-                              </>
-                            ) : (
-                              <>
-                                <svg
-                                  className="w-5 h-5"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M5 13l4 4L19 7"
-                                  />
-                                </svg>
-                                <span className="text-sm sm:text-base">
-                                  Confirmar Asistencia
-                                </span>
-                              </>
-                            )}
-                          </span>
-                        </motion.button>
-                      </>
+                                <span>WhatsApp</span>
+                              </a>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     )}
-
-                    <AnimatePresence>
-                      {showSuccess && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -10, scale: 0.9 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: -10, scale: 0.9 }}
-                          className="bg-green-50 border-2 border-green-200 rounded-xl p-4 flex items-center gap-3"
-                        >
-                          <div className="flex-shrink-0 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                            <svg
-                              className="w-5 h-5 text-white"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                          </div>
-                          <div className="flex-1">
-                            <p className="text-green-700 font-medium text-sm sm:text-base">
-                              ¡Confirmación guardada exitosamente!
-                            </p>
-                            <p className="text-green-600 text-xs sm:text-sm">
-                              Nos vemos el día de la boda ❤️
-                            </p>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
+
+                {/* Modal de Confirmación */}
+                <ConfirmationModal
+                  isOpen={showConfirmationModal}
+                  onClose={() => setShowConfirmationModal(false)}
+                  invitado={invitado}
+                  onConfirm={actualizarConfirmacion}
+                  fechaLimitePasada={fechaLimitePasada}
+                />
 
               {/* Mensaje final */}
               <motion.div

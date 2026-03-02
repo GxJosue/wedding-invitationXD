@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useScrollLock } from '../hooks/useScrollLock';
 
 interface LocationModalProps {
   isOpen: boolean;
@@ -7,6 +7,7 @@ interface LocationModalProps {
 }
 
 export const LocationModal = ({ isOpen, onClose }: LocationModalProps) => {
+  useScrollLock(isOpen);
   const location = {
     name: "Edificio Kali",
     address: "3a Calle Poniente y, 10a Avenida Sur, Santa Ana",
@@ -15,7 +16,7 @@ export const LocationModal = ({ isOpen, onClose }: LocationModalProps) => {
     googleMapsUrl: "https://share.google/HEckk0y4K0MSTVIuJ", 
   };
 
-  // ❌ REEMPLAZA ESTO:
+  
 const embedUrl = `https://maps.google.com/maps?q=${location.lat},${location.lng}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
   return (
     <AnimatePresence>
