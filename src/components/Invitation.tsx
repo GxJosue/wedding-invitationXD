@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../contexts/AuthContext";
 import { useInvitado } from "../hooks/useInvitado";
 import { Countdown } from "./Countdown";
+import { PhotoCarousel } from './PhotoCarousel';      
+import { LocationMap } from './LocationMap';  
+import { LocationModal } from './LocationModal'; 
 
 export const Invitation = () => {
   const { usuario, signOut, isAdmin } = useAuth();
@@ -12,6 +15,7 @@ export const Invitation = () => {
   const [confirmados, setConfirmados] = useState(0);
   const [saving, setSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showLocationModal, setShowLocationModal] = useState(false);
 
   // Configuración de fecha límite
   const FECHA_LIMITE = new Date("2026-03-03T23:59:59"); 
@@ -305,6 +309,8 @@ export const Invitation = () => {
                 </div>
               </motion.div>
 
+              <PhotoCarousel />
+
               {/* Información del evento */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -312,78 +318,119 @@ export const Invitation = () => {
                 transition={{ delay: 1.1 }}
                 className="grid md:grid-cols-2 gap-8 mb-16"
               >
-                {/* Fecha */}
-                <motion.div
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  className="relative group"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-wedding-primary to-wedding-accent rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
-                  <div className="relative bg-white rounded-2xl p-8 shadow-lg border border-wedding-primary/10 text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-wedding-primary to-wedding-accent rounded-full mb-4 shadow-lg">
-                      <svg
-                        className="w-8 h-8 text-white"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 className="font-elegant text-2xl bg-clip-text text-transparent bg-gradient-to-r from-wedding-primary to-wedding-accent mb-3">
-                      Fecha & Hora
-                    </h3>
-                    <p className="text-gray-800 text-lg font-semibold mb-1">
-                      15 de Junio, 2026
-                    </p>
-                    <p className="text-wedding-primary font-medium">5:00 PM</p>
+              {/* Fecha con gradiente y patrón */}
+              <motion.div
+                whileHover={{ y: -5, scale: 1.02 }}
+                className="relative group overflow-hidden rounded-2xl shadow-lg h-full"
+              >
+                {/* Fondo con gradiente */}
+                <div className="absolute inset-0 bg-gradient-to-br from-wedding-primary via-wedding-accent to-wedding-primary">
+                  {/* Patrón decorativo */}
+                  <div className="absolute inset-0 opacity-20">
+                    <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <pattern id="clock-pattern" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                          {/* Círculos de reloj */}
+                          <circle cx="40" cy="40" r="30" fill="none" stroke="white" strokeWidth="2"/>
+                          <circle cx="40" cy="40" r="3" fill="white"/>
+                          <line x1="40" y1="40" x2="40" y2="20" stroke="white" strokeWidth="2"/>
+                          <line x1="40" y1="40" x2="55" y2="40" stroke="white" strokeWidth="2"/>
+                        </pattern>
+                      </defs>
+                      <rect width="100%" height="100%" fill="url(#clock-pattern)"/>
+                    </svg>
                   </div>
-                </motion.div>
+                </div>
 
-                {/* Lugar */}
-                <motion.div
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  className="relative group"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-wedding-accent to-wedding-primary rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
-                  <div className="relative bg-white rounded-2xl p-8 shadow-lg border border-wedding-primary/10 text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-wedding-accent to-wedding-primary rounded-full mb-4 shadow-lg">
-                      <svg
-                        className="w-8 h-8 text-white"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
+                {/* Contenido */}
+                <div className="relative h-full flex flex-col justify-between p-8 text-white min-h-[320px]">
+                  <div className="flex justify-center">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-md rounded-full shadow-xl border-2 border-white/30 group-hover:scale-110 transition-transform">
+                      <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                     </div>
-                    <h3 className="font-elegant text-2xl bg-clip-text text-transparent bg-gradient-to-r from-wedding-primary to-wedding-accent mb-3">
-                      Lugar
-                    </h3>
-                    <p className="text-gray-800 text-lg font-semibold mb-1">
-                      Jardín Los Rosales
-                    </p>
-                    <p className="text-wedding-primary font-medium">
-                      Av. Principal #123
-                    </p>
                   </div>
+
+                  <div className="text-center space-y-3">
+                    <h3 className="font-elegant text-2xl mb-3 drop-shadow-lg">Fecha & Hora</h3>
+                    
+                    {/* Fecha grande y destacada */}
+                    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                      <p className="text-5xl font-bold mb-2 font-elegant">15</p>
+                      <p className="text-lg font-semibold">Junio 2026</p>
+                    </div>
+                    
+                    {/* Hora */}
+                    <div className="flex items-center justify-center gap-2 mt-3">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <p className="text-xl font-semibold">5:00 PM</p>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-center">
+                    <div className="h-1 w-24 bg-white/30 rounded-full"></div>
+                  </div>
+                </div>
+
+                {/* Efecto de brillo al hover */}
+                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-all duration-500 pointer-events-none"></div>
+              </motion.div>
+
+                {/* Lugar con imagen de fondo */}
+                <motion.div
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  className="relative group overflow-hidden rounded-2xl shadow-lg h-full"
+                >
+                  {/* Imagen de fondo */}
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                    style={{
+                      backgroundImage: 'url(/lugar.jpg)' 
+                    }}
+                  >
+                    {/* Overlay oscuro con gradiente */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30"></div>
+                  </div>
+
+                  {/* Contenido */}
+                  <div className="relative h-full flex flex-col justify-between p-8 text-white min-h-[320px]">
+                    {/* Icono superior */}
+                    <div className="flex justify-center">
+                      <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-md rounded-full shadow-xl border-2 border-white/30">
+                        <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                      </div>
+                    </div>
+
+                    {/* Información */}
+                    <div className="text-center space-y-2">
+                      <h3 className="font-elegant text-2xl mb-3 drop-shadow-lg">Lugar</h3>
+                      <p className="text-white text-lg font-semibold mb-1 drop-shadow-md">Edificio Kali</p>
+                      <p className="text-white/90 font-medium drop-shadow-md">3a Calle Poniente y, 10a Avenida Sur, Santa Ana</p>
+                    </div>
+
+                    {/* Botón Cómo Llegar */}
+                    <button
+                      onClick={() => setShowLocationModal(true)}
+                      className="w-full bg-white/95 backdrop-blur-sm text-wedding-primary py-3 px-6 rounded-xl font-semibold hover:bg-white hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn"
+                    >
+                      <svg className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                      </svg>
+                      <span>Cómo Llegar</span>
+                    </button>
+                  </div>
+
+                  {/* Brillo decorativo */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-wedding-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                 </motion.div>
               </motion.div>
+
 
               {/* Cuenta Regresiva */}
               <Countdown />
@@ -692,12 +739,6 @@ export const Invitation = () => {
                             )}
                           </span>
                         </motion.button>
-
-                        {confirmados === 0 && (
-                          <p className="text-xs sm:text-sm text-center text-gray-500">
-                            Selecciona al menos 1 persona para confirmar
-                          </p>
-                        )}
                       </>
                     )}
 
@@ -768,6 +809,11 @@ export const Invitation = () => {
           </div>
         </motion.div>
       </div>
+            {/* Modal de Ubicación */}
+      <LocationModal 
+        isOpen={showLocationModal} 
+        onClose={() => setShowLocationModal(false)} 
+      />
     </div>
   );
 };
