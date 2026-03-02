@@ -430,7 +430,7 @@ const [showConfirmationModal, setShowConfirmationModal] = useState(false);
                           </h3>
                           
                           <p className="text-green-700 text-lg mb-8">
-                             <span className="font-bold text-2xl">{invitado.confirmados}</span> {invitado.confirmados === 1 ? 'invitado' : 'invitados'}
+                             <span className="font-bold text-2xl">{invitado.confirmados}</span> {invitado.confirmados === 1 ? 'persona' : 'personas'}
                           </p>
 
                               <motion.button

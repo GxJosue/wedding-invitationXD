@@ -182,7 +182,7 @@ export const ConfirmationModal = ({
                               </svg>
                             </div>
                             <div className="flex-1">
-                              <h4 className="font-bold text-gray-800 mb-2 text-lg">💝 Sobre el Regalo</h4>
+                              <h4 className="font-bold text-gray-800 mb-2 text-lg">🎁 Sobre el Regalo</h4>
                               <p className="text-gray-700 text-sm leading-relaxed">
                                 Agradecemos su muestra de cariño 
                                 en regalo de <strong className="text-wedding-primary">sobre</strong>. 
