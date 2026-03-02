@@ -29,7 +29,7 @@ export const AdminPanel = () => {
     cargarInvitados();
   }, []);
 
-  const totalConfirmados = invitados.reduce((sum, inv) => sum + inv.confirmados, 0);
+  const totalConfirmados = invitados.reduce((sum, inv) => sum + (inv.confirmados || 0), 0);
   const totalMaximo = invitados.reduce((sum, inv) => sum + inv.maxInvitados, 0);
   const totalConConfirmacion = invitados.filter(inv => inv.confirmacion).length;
 
