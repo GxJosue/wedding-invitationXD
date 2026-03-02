@@ -155,7 +155,7 @@ const [showConfirmationModal, setShowConfirmationModal] = useState(false);
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
-                  className="mb-6"
+                  className="mb-3"
                 >
                   <div className="relative">
                     <div className="absolute inset-0 bg-white/20 rounded-full blur-xl animate-pulse-slow"></div>
@@ -173,7 +173,7 @@ const [showConfirmationModal, setShowConfirmationModal] = useState(false);
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
-                  className="text-5xl md:text-6xl font-script mb-3 text-center drop-shadow-lg"
+                  className="text-4xl md:text-5xl font-script mb-2 text-center drop-shadow-lg"
                 >
                   ¡Estás Invitado!
                 </motion.h1>
@@ -293,34 +293,27 @@ const [showConfirmationModal, setShowConfirmationModal] = useState(false);
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.1 }}
-                className="grid md:grid-cols-2 gap-8 mb-16"
+                className="grid md:grid-cols-2 gap-8 mb-8"
               >
-              {/* Fecha con gradiente y patrón */}
+              {/* Fecha con imagen de fondo */}
               <motion.div
                 whileHover={{ y: -5, scale: 1.02 }}
                 className="relative group overflow-hidden rounded-2xl shadow-lg h-full"
               >
-                {/* Fondo con gradiente */}
-                <div className="absolute inset-0 bg-gradient-to-br from-wedding-primary via-wedding-accent to-wedding-primary">
-                  {/* Patrón decorativo */}
-                  <div className="absolute inset-0 opacity-20">
-                    <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                      <defs>
-                        <pattern id="clock-pattern" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
-                          {/* Círculos de reloj */}
-                          <circle cx="40" cy="40" r="30" fill="none" stroke="white" strokeWidth="2"/>
-                          <circle cx="40" cy="40" r="3" fill="white"/>
-                          <line x1="40" y1="40" x2="40" y2="20" stroke="white" strokeWidth="2"/>
-                          <line x1="40" y1="40" x2="55" y2="40" stroke="white" strokeWidth="2"/>
-                        </pattern>
-                      </defs>
-                      <rect width="100%" height="100%" fill="url(#clock-pattern)"/>
-                    </svg>
-                  </div>
+                {/* Imagen de fondo */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                  style={{
+                    backgroundImage: 'url(/calendario.png)' 
+                  }}
+                >
+                  {/* Overlay oscuro con gradiente */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30"></div>
                 </div>
 
                 {/* Contenido */}
                 <div className="relative h-full flex flex-col justify-between p-8 text-white min-h-[320px]">
+                  {/* Icono superior */}
                   <div className="flex justify-center">
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-md rounded-full shadow-xl border-2 border-white/30 group-hover:scale-110 transition-transform">
                       <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -329,13 +322,14 @@ const [showConfirmationModal, setShowConfirmationModal] = useState(false);
                     </div>
                   </div>
 
+                  {/* Información */}
                   <div className="text-center space-y-3">
                     <h3 className="font-elegant text-2xl mb-3 drop-shadow-lg">Fecha & Hora</h3>
                     
                     {/* Fecha grande y destacada */}
                     <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                      <p className="text-5xl font-bold mb-2 font-elegant">15</p>
-                      <p className="text-lg font-semibold">Junio 2026</p>
+                      <p className="text-5xl font-bold mb-2 font-elegant drop-shadow-lg">15</p>
+                      <p className="text-lg font-semibold drop-shadow-md">Julio 2026</p>
                     </div>
                     
                     {/* Hora */}
@@ -343,17 +337,18 @@ const [showConfirmationModal, setShowConfirmationModal] = useState(false);
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      <p className="text-xl font-semibold">5:00 PM</p>
+                      <p className="text-xl font-semibold drop-shadow-md">5:00 PM</p>
                     </div>
                   </div>
 
+                  {/* Decoración inferior */}
                   <div className="flex justify-center">
                     <div className="h-1 w-24 bg-white/30 rounded-full"></div>
                   </div>
                 </div>
 
-                {/* Efecto de brillo al hover */}
-                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-all duration-500 pointer-events-none"></div>
+                {/* Brillo decorativo */}
+                <div className="absolute inset-0 bg-gradient-to-t from-wedding-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
               </motion.div>
 
                 {/* Lugar con imagen de fondo */}
@@ -438,12 +433,12 @@ const [showConfirmationModal, setShowConfirmationModal] = useState(false);
                              <span className="font-bold text-2xl">{invitado.confirmados}</span> {invitado.confirmados === 1 ? 'invitado' : 'invitados'}
                           </p>
 
-                          <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => setShowConfirmationModal(true)}
-                            className="inline-flex items-center gap-2 bg-gradient-to-r from-wedding-primary to-wedding-accent text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
-                          >
+                              <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => setShowConfirmationModal(true)}
+                                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-wedding-primary to-wedding-accent text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
+                              >
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -495,7 +490,7 @@ const [showConfirmationModal, setShowConfirmationModal] = useState(false);
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                               onClick={() => setShowConfirmationModal(true)}
-                              className="inline-flex items-center gap-3 bg-gradient-to-r from-wedding-primary via-wedding-accent to-wedding-primary text-white px-10 py-5 rounded-xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all"
+                              className="w-full sm:w-auto flex items-center justify-center gap-3 bg-gradient-to-r from-wedding-primary via-wedding-accent to-wedding-primary text-white px-8 sm:px-10 py-4 sm:py-5 rounded-xl font-semibold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all"
                             >
                               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

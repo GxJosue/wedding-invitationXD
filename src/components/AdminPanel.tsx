@@ -153,7 +153,7 @@ export const AdminPanel = () => {
             maxInvitados: maxInvitados,
             confirmados: 0,
             confirmacion: false,
-            rol: 'invitado'  // ⬅️ AGREGA ESTO
+            rol: 'invitado'  
           };
           try {
             await setDoc(doc(db, 'invitados', invitadoData.email), invitadoData);
