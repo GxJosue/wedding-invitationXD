@@ -122,7 +122,7 @@ const [showConfirmationModal, setShowConfirmationModal] = useState(false);
           {/* Card */}
           <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-wedding-primary/10">
             {/* Header con imagen decorativa */}
-            <div className="relative h-80 bg-gradient-to-br from-wedding-primary via-wedding-accent to-wedding-primary overflow-hidden">
+            <div className="relative h-72 sm:h-80 bg-gradient-to-br from-wedding-primary via-wedding-accent to-wedding-primary overflow-hidden">
               {/* Patrón decorativo */}
               <div className="absolute inset-0 opacity-10">
                 <svg
@@ -209,10 +209,115 @@ const [showConfirmationModal, setShowConfirmationModal] = useState(false);
                   ></path>
                 </svg>
               </div>
-            </div>
+              </div>  {/* Cierra header */}
+
+              
 
             {/* Contenido */}
             <div className="p-8 md:p-12 lg:p-16">
+              {/* Foto de Pareja con Humo Lila */}
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8, duration: 0.8 }}
+                  className="relative -mt-16 sm:-mt-20 md:-mt-24 px-4 mb-12 sm:mb-16"
+                >
+                {/* Contenedor con efectos de humo */}
+                <div className="relative max-w-md mx-auto">
+                  {/* Efectos de humo/brillo lila */}
+                  <div className="absolute -inset-8 sm:-inset-12">
+                    <motion.div
+                      animate={{
+                        scale: [1, 1.1, 1],
+                        opacity: [0.3, 0.5, 0.3],
+                      }}
+                      transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      className="absolute top-0 left-1/4 w-32 h-32 sm:w-40 sm:h-40 bg-wedding-primary/30 rounded-full blur-3xl"
+                    />
+                    <motion.div
+                      animate={{
+                        scale: [1.1, 1, 1.1],
+                        opacity: [0.4, 0.6, 0.4],
+                      }}
+                      transition={{
+                        duration: 5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 1,
+                      }}
+                      className="absolute bottom-0 right-1/4 w-40 h-40 sm:w-48 sm:h-48 bg-wedding-accent/30 rounded-full blur-3xl"
+                    />
+                    <motion.div
+                      animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.2, 0.4, 0.2],
+                      }}
+                      transition={{
+                        duration: 6,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 2,
+                      }}
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 sm:w-56 sm:h-56 bg-wedding-primary/20 rounded-full blur-3xl"
+                    />
+                  </div>
+
+                  {/* Card con la foto */}
+                  <motion.div
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 1, duration: 0.6 }}
+                    className="relative bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-white"
+                  >
+                    {/* Imagen de pareja */}
+                    <div className="relative aspect-[3/4] sm:aspect-[4/5] overflow-hidden">
+                      <img
+                        src="/pareja.png"
+                        alt="Josué y Daniela"
+                        className="w-full h-full object-cover"
+                      />
+                      
+                      {/* Overlay gradiente */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+
+                      {/* Texto sobre la imagen */}
+                      <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 text-center text-white">
+                      <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 1.3, duration: 0.6 }}
+                        className="text-xl sm:text-2xl md:text-3xl font-script tracking-wide leading-snug text-white"
+                        style={{
+                          textShadow: "0 0 10px #ba83fd, 0 0 20px rgba(125, 71, 191, 0.6)"
+                        }}
+                      >
+                        Josué <br />
+                        <span className="text-lg opacity-95">&</span> <br />
+                        Daniela
+                      </motion.h2>
+                        
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 1.5, duration: 0.6 }}
+                          className="flex flex-col items-center gap-2"
+                        >
+                          <div className="h-px w-24 bg-white/50"></div>
+                          <p className="text-sm sm:text-base font-light tracking-[0.3em] uppercase">
+                            Nuestra Boda
+                          </p>
+                          <div className="h-px w-24 bg-white/50"></div>
+                        </motion.div>
+                      </div>
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
+
               {/* Nombre del invitado */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
